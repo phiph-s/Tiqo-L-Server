@@ -41,6 +41,7 @@ public class EventManager {
 		//JSONObject data = (JSONObject) paket.get("data");
 		
 		if (id.equals("c01")) {
+			user.setParameters(paket.getJSONObject("data").getJSONObject("parameters"));
 			for (EventHandler e : handlers) {
 				e.onHandshakeComplete(user, secret);
 			}

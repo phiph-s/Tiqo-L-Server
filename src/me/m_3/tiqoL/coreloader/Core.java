@@ -3,6 +3,8 @@ package me.m_3.tiqoL.coreloader;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 
+import org.slf4j.LoggerFactory;
+
 import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.event.EventHandler;
 import me.m_3.tiqoL.user.User;
@@ -10,6 +12,8 @@ import me.m_3.tiqoL.user.User;
 public class Core {
 	
 	String name;
+	
+	public static org.slf4j.Logger Logger = LoggerFactory.getLogger(Core.class);
 	
 	public Core(WSServer server , String name) {
 		this.name = name;

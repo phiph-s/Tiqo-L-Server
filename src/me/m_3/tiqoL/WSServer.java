@@ -15,7 +15,10 @@ import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 import org.java_websocket.WebSocket;
@@ -202,12 +205,27 @@ public class WSServer extends WebSocketServer {
 		try {
 			Logger.info("Loading core '"+files[0] + "' ...");
 			
+			JarFile jarFile = new JarFile(files[0]);
+			Enumeration<JarEntry> e = jarFile.entries();
+			
 			@SuppressWarnings("deprecation")
 			final URLClassLoader cl = new URLClassLoader (new URL[] {files[0].toURL()});
-
+			
+			while (e.hasMoreElements()) {
+			    JarEntry je = e.nextElement();
+			    if(je.isDirectory() || !je.getName().endsWith(".class")){
+			        continue;
+			    }
+			    String className = je.getName().substring(0,je.getName().length()-6);
+			    className = className.replace('/', '.');
+			    cl.loadClass(className);
+			}
+			
 			final Class<?> pointerClass = cl.loadClass("Pointer");
 			final ClassPointer classPointer = (ClassPointer) pointerClass.getConstructor().newInstance();
 			this.core = classPointer.getCore(this);
+			
+			jarFile.close();
 			
 			cl.close();
 			

@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.security.SecureRandom;
 
 import org.java_websocket.WebSocket;
+import org.json.JSONObject;
 
 import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.htmlbuilder.box.HTMLBox;
@@ -20,6 +21,16 @@ public class User {
 	String sessionKey;
 	InetSocketAddress adress;
 	WebSocket socket;
+	
+	public JSONObject getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(JSONObject parameters) {
+		this.parameters = parameters;
+	}
+
+	JSONObject parameters;
 	
 	UserStatus userStatus = UserStatus.HANDSHAKE;
 	
@@ -139,13 +150,6 @@ public class User {
 	 */
 	public HTMLBox getHtmlBox() {
 		return htmlBox;
-	}
-
-	/**
-	 * @param htmlBox the htmlBox to set
-	 */
-	public void setHtmlBox(HTMLBox htmlBox) {
-		this.htmlBox = htmlBox;
 	}
 		
 }
