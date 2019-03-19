@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+import org.slf4j.LoggerFactory;
+
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response;
 import me.m_3.tiqoL.user.User;
@@ -18,6 +20,8 @@ public class ServableFile {
 	boolean privateFile = false;
 	
 	ArrayList<User> access = new ArrayList<User>();
+	
+	static org.slf4j.Logger Logger = LoggerFactory.getLogger(ServableFile.class);
 	
 	String mimeType;
 	File file;
@@ -75,7 +79,7 @@ public class ServableFile {
             	mimeType = fileType;
             }
          } catch (IOException e) {
-             e.printStackTrace();
+             Logger.warn("The requested file can't be served ("+e.getMessage()+")");
          }
 		try {
 			return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, mimeType, new FileInputStream(file), file.length());

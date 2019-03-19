@@ -16,6 +16,9 @@ import me.m_3.tiqoL.htmlbuilder.HTMLDiv;
 import me.m_3.tiqoL.htmlbuilder.HTMLObject;
 import me.m_3.tiqoL.htmlbuilder.HTMLSpan;
 import me.m_3.tiqoL.htmlbuilder.exceptions.UnknownObjectIDException;
+import me.m_3.tiqoL.htmlbuilder.input.HTMLCheckbox;
+import me.m_3.tiqoL.htmlbuilder.input.HTMLTextInput;
+import me.m_3.tiqoL.htmlbuilder.input.TextInputType;
 import me.m_3.tiqoL.paket.PaketSender;
 import me.m_3.tiqoL.user.User;
 
@@ -94,8 +97,26 @@ public class HTMLBox {
 		else if (json.getString("tiqoL-type").equals("span")) {
 			htmlObj = new HTMLSpan(json.getString("insideText"));
 		}
-		else if (json.getString("tiqoL-type").equals("span")) {
-			htmlObj = new HTMLSpan(json.getString("insideText"));
+		else if (json.getString("tiqoL-type").equals("input_checkbox")) {
+			boolean checked = false;
+			
+			try {
+				if (json.getJSONObject("attributes").has("checked")) {
+					checked = true;
+				}
+			}catch(Exception ex){}
+			
+			htmlObj = new HTMLCheckbox(checked);
+		}
+		else if (json.getString("tiqoL-type").equals("input_text")) {
+			TextInputType type = TextInputType.TEXT;
+			
+			try {
+				String checked_str = json.getJSONObject("attributes").getString("type");
+				type = TextInputType.valueOf(checked_str.toUpperCase());
+			}catch(Exception ex){}
+			
+			htmlObj = new HTMLTextInput(type);
 		}
 		
 		//Attributes
@@ -126,7 +147,9 @@ public class HTMLBox {
 		htmlObj.setObjectID(json.getString("id"));
 		
 		//Inside Text
-		htmlObj.insideText = json.getString("insideText");
+		htmlObj.insideText = "";
+		if (json.has("insideText"))
+			htmlObj.insideText = json.getString("insideText");
 		
 		//Children
 		JSONArray array = json.getJSONArray("children");

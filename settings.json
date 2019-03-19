@@ -1,0 +1,18 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": 9885,
+    "contentServerPort": 9985,
+    "use-ssl": false,
+    "keystore": {
+      "letsencrypt" : {
+      	"use" : true,
+      	"path" : "pem",
+      	"password" : "yourPassword"
+      },
+      "file": "keystore.jks",
+      "storepassword": "yourPassword",
+      "keypassword": "yourPassword"
+    }
+  }
+}

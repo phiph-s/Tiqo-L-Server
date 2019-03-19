@@ -6,17 +6,30 @@ import me.m_3.tiqoL.htmlbuilder.handlers.HTMLCheckboxHandler;
 
 public class HTMLCheckbox extends HTMLObject{
 
-	public HTMLCheckbox(String text , boolean checked) {
+	public HTMLCheckbox(boolean checked) {
 		super("input");
-		this.insideText = text;
+		
+		//The checkbox doesn't have insideText
+		//this.insideText = text;
+		
 		this.tiqo_object = "input_checkbox";
 		
-		this.protected_attributes.put("type", "checkbox");
-		this.protected_attributes.put("checked", checked + "");
+		this.setChecked(checked);
 	}
 	
-	public void setCheckboxHandler(EventManager eventManager , HTMLCheckboxHandler handler) {
-		
+	public HTMLCheckbox setChecked(boolean checked) {
+		this.protected_attributes.put("type", "checkbox");
+		if (checked)
+			this.protected_attributes.put("checked", "");
+		else {
+			this.protected_attributes.remove("checked");
+		}
+		return this;
+	}
+	
+	public HTMLCheckbox setCheckboxHandler(EventManager eventManager , HTMLCheckboxHandler handler) {
+		eventManager.regsiterCheckboxHandler(this.getObjectID(), handler);
+		return this;
 	}
 
 }

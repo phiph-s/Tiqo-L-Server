@@ -66,8 +66,8 @@ public class ContentServer extends NanoHTTPD {
 	
 	public String getPrivateURL(String id) {
 		if (this.secured)
-			return "https://"+this.host+":"+this.port+"/?file="+id+"&auth={tyqoL-authKey}";
-		return "http://"+this.host+":"+this.port+"/?file="+id+"&auth={tyqoL-authKey}";
+			return "https://"+this.host+":"+this.port+"/?file="+id+"&auth={tiqoL-authKey}";
+		return "http://"+this.host+":"+this.port+"/?file="+id+"&auth={tiqoL-authKey}";
 	}
 	
     @Override
