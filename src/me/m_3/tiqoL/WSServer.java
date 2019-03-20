@@ -180,7 +180,10 @@ public class WSServer extends WebSocketServer {
 		getEventManager().registerHandler(mainEventHandler);
 		
 		mainHTMLClickHandler = new MainHTMLClickHandler();
-		
+				
+	}
+	
+	void loadCore() {
 		//Load Core
 		
 		File dir = new File("core");
@@ -201,7 +204,6 @@ public class WSServer extends WebSocketServer {
 				e.printStackTrace();
 			}
 		}
-
 		try {
 			Logger.info("Loading core '"+files[0] + "' ...");
 			
@@ -261,7 +263,6 @@ public class WSServer extends WebSocketServer {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
    /**

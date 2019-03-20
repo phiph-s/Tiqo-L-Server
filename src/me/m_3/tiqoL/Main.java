@@ -80,8 +80,9 @@ public class Main {
 				}
 	    	}
     	}
-    	
     	new File("core").mkdir();
+    	
+    	
     	    	
     	JSONObject settings = new JSONObject(WSServer.readFile(System.getProperty("user.dir") + File.separator + "settings.json"));
     	JSONObject serverSettings = settings.getJSONObject("server");
@@ -110,7 +111,7 @@ public class Main {
 	    		}	    		
 	    	}
     	}
-    	    	
+    	
     	//Create content server (Nanohhttpd-server)
     	int contentPort = serverSettings.getInt("contentServerPort");
     	Logger.info("Starting content server on port "+contentPort+" ...");
@@ -164,6 +165,7 @@ public class Main {
     	    }
     	});
     	
+    	server.loadCore();
     	this.webSocketServer.run();
     }
     
