@@ -43,7 +43,13 @@ public class EventManager {
 		if (id.equals("c01")) {
 			user.setParameters(paket.getJSONObject("data").getJSONObject("parameters"));
 			for (EventHandler e : handlers) {
-				e.onHandshakeComplete(user, secret);
+				try {
+					e.onHandshakeComplete(user, secret);
+				}
+				catch(Exception ex) {
+					Logger.error("Error in EventHandler " + e.getClass().getName() + " on onHandshakeComplete:");
+					ex.printStackTrace();
+				}
 			}
 		}
 		else if (id.equals("c100")) {
@@ -68,7 +74,13 @@ public class EventManager {
 	
 	public void callConnectionEndEvent(User user , int code , String reason , boolean remote) {
 		for (EventHandler e : handlers) {
-			e.onConnectionEnd(user , code , reason , remote);
+			try {
+				e.onConnectionEnd(user , code , reason , remote);
+			}
+			catch(Exception ex) {
+				Logger.error("Error in EventHandler " + e.getClass().getName() + " on onConnectionEnd:");
+				ex.printStackTrace();
+			}
 		}
 	}
 	
@@ -79,7 +91,17 @@ public class EventManager {
 	}
 	
 	public void callHTMLClick(User user , String id , double x , double y , double pageX , double pageY) {
-		clickHandlers.get(id).onClick(user, id, x, y, pageX, pageY);
+		if (!clickHandlers.containsKey(id)) {
+			Logger.warn("Unused incoming click event on id " + id);
+			return;
+		}
+		try {
+			clickHandlers.get(id).onClick(user, id, x, y, pageX, pageY);
+		}
+		catch(Exception ex) {
+			Logger.error("Error in EventHandler " + checkboxHandlers.get(id).getClass().getName() + " on HTMLClick (id: "+id+"):");
+			ex.printStackTrace();
+		}
 	}
 	
 	//Checkbox
@@ -95,7 +117,14 @@ public class EventManager {
 			Logger.warn("Unused incoming checkbox input event on id " + id);
 			return;
 		}
-		checkboxHandlers.get(id).onToggle(user, id, press);
+		
+		try {
+			checkboxHandlers.get(id).onToggle(user, id, press);
+		}
+		catch(Exception ex) {
+			Logger.error("Error in EventHandler " + checkboxHandlers.get(id).getClass().getName() + " on HTMLCheckboxToggle (id: "+id+"):");
+			ex.printStackTrace();
+		}
 	}
 	
 	//Text
@@ -111,6 +140,12 @@ public class EventManager {
 			Logger.warn("Unused incoming text input event on id " + id);
 			return;
 		}
-		textInputHandlers.get(id).onInput(user, id, text);
+		try {
+			textInputHandlers.get(id).onInput(user, id, text);
+		}
+		catch(Exception ex) {
+			Logger.error("Error in EventHandler " + checkboxHandlers.get(id).getClass().getName() + " on HTMLTextInput (id: "+id+"):");
+			ex.printStackTrace();
+		}
 	}
 }
