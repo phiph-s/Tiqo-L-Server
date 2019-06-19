@@ -19,7 +19,7 @@ public class User {
 
 	String secretKey;
 	String sessionKey;
-	InetSocketAddress adress;
+	InetSocketAddress address;
 	WebSocket socket;
 	
 	public JSONObject getParameters() {
@@ -40,7 +40,7 @@ public class User {
 	public User (WSServer server , WebSocket socket) {
 		
 		this.socket = socket;
-		this.adress = socket.getRemoteSocketAddress();
+		this.address = socket.getRemoteSocketAddress();
 		this.server = server;
 		this.htmlBox = new HTMLBox(server , this);
 		generateSecretKey(2056);
@@ -104,17 +104,17 @@ public class User {
 	}
 
 	/**
-	 * @return the adress
+	 * @return the address
 	 */
-	public InetSocketAddress getAdress() {
-		return adress;
+	public InetSocketAddress getAddress() {
+		return address;
 	}
 
 	/**
-	 * @param adress the adress to set
+	 * @param address the address to set
 	 */
-	public void setAdress(InetSocketAddress adress) {
-		this.adress = adress;
+	public void setaddress(InetSocketAddress address) {
+		this.address = address;
 	}
 
 	/**

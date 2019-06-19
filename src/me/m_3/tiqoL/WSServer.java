@@ -338,8 +338,10 @@ public class WSServer extends WebSocketServer {
 
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
-		if (this.getUserMap().containsKey(conn.getRemoteSocketAddress())) {
-			this.getEventManager().callConnectionEndEvent(this.userMap.get(conn.getRemoteSocketAddress()) , 0 , null , true);
+		if (this.getUserMap() != null && conn != null) {
+			if (this.getUserMap().containsKey(conn.getRemoteSocketAddress())) {
+				this.getEventManager().callConnectionEndEvent(this.userMap.get(conn.getRemoteSocketAddress()) , 0 , null , true);
+			}
 		}
 		if (conn != null)
 			Logger.error("an error occured on connection " + conn.getRemoteSocketAddress()  + ":" + ex);

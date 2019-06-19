@@ -31,13 +31,13 @@ public class MainEventHandler implements EventHandler{
 	public void onHandshakeComplete(User user , String secret) {
 		user.setUserStatus(UserStatus.OPEN);
 
-		Logger.debug("User authentication-handshake complete: " + user.getAdress() + " " + user.getUserStatus());
+		Logger.debug("User authentication-handshake complete: " + user.getAddress() + " " + user.getUserStatus());
 	}
 	
 	@Override
 	public void onConnectionEnd(User user , int code , String reason , boolean remote) {
 		user.setUserStatus(UserStatus.CLOSED);
-		server.userMap.remove(user.getAdress());
+		server.userMap.remove(user.getAddress());
 		Logger.debug("Connection ended");
 	}
 	

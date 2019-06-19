@@ -42,7 +42,7 @@ public class SessionStorage{
 				security.remove(e);
 				Document doc = new Document().put("secret" , user.getSecretKey()).put("session", session);
 				security.insert(doc);
-				Logger.info(user.getAdress() + " resumed session: " + session);
+				Logger.info(user.getAddress() + " resumed session: " + session);
 				return;
 			}
 		}
@@ -54,7 +54,7 @@ public class SessionStorage{
 		Document doc = new Document().put("secret" , user.getSecretKey()).put("session", session_id.toString());
 		security.insert(doc);
 		user.setSessionKey(session_id.toString());
-		Logger.info(user.getAdress() + " temporary session key: " + session_id);
+		Logger.info(user.getAddress() + " temporary session key: " + session_id);
 	}
 	
 }
