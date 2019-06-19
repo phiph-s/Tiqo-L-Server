@@ -198,6 +198,7 @@ public class WSServer extends WebSocketServer {
 			Logger.error("No core provided! Place a core inside the /core folder!");
 			try {
 				this.stop();
+				Logger.info("Server shut down.");
 				return;
 			} catch (IOException e) {
 				e.printStackTrace();
