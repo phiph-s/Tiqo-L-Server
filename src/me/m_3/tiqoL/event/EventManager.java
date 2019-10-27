@@ -99,7 +99,7 @@ public class EventManager {
 			clickHandlers.get(id).onClick(user, id, x, y, pageX, pageY);
 		}
 		catch(Exception ex) {
-			Logger.error("Error in EventHandler " + checkboxHandlers.get(id).getClass().getName() + " on HTMLClick (id: "+id+"):");
+			Logger.error("Error in EventHandler " + clickHandlers.get(id).getClass().getName() + " on HTMLClick (id: "+id+"):");
 			ex.printStackTrace();
 		}
 	}
