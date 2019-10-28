@@ -22,7 +22,6 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -30,6 +29,9 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.SimpleLayout;
 import org.java_websocket.server.DefaultSSLWebSocketServerFactory;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
@@ -57,8 +59,18 @@ public class Main {
     	new Main();
     }
     
-    public Main () { 	
-    	    	
+    public Main () { 	    	    	
+
+    	try {
+			SimpleLayout layout = new SimpleLayout();
+			FileAppender fileAppender = new FileAppender( layout, "logs/latest.log", false );
+			org.apache.log4j.Logger.getRootLogger().addAppender( fileAppender );
+			// ALL | DEBUG | INFO | WARN | ERROR | FATAL | OFF:
+			org.apache.log4j.Logger.getRootLogger().setLevel( Level.INFO );
+		} catch( Exception ex ) {
+			System.out.println( ex );
+	    }
+    	
     	String[] copyFiles = {"settings.json"};
     	
     	BasicConfigurator.configure();
