@@ -170,8 +170,8 @@ public class HTMLBox {
 	}
 	
 	public void buildDirectAccess(HTMLObject from) {
+		this.getDirectAccess().put(from.getObjectID(), from);
 		for (HTMLObject obj : from.getChildren()) {
-			this.getDirectAccess().put(obj.getObjectID(), obj);
 			buildDirectAccess(obj);
 		}
 	}
@@ -187,6 +187,13 @@ public class HTMLBox {
 			PaketSender.sendRebuildHTMLPaket(server, user, this.toJSON());
 		}
 		
+	}
+	
+	public HTMLBody getBody() {
+		if (this.body != null) {
+			return this.body;
+		}
+		return null;
 	}
 	
 	public HTMLObject searchParent(HTMLObject from , String objectID) {
