@@ -47,7 +47,7 @@ public class User {
 		
 	}
 	
-	public void setHTMLBox (HTMLBox box) {
+	public void setHTMLBox (HTMLBox box) throws Exception {
 		this.htmlBox = box;
 		PaketSender.sendRebuildHTMLPaket(server, this, this.htmlBox.toJSON());
 	}

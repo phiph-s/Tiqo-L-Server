@@ -36,6 +36,7 @@ public class MainEventHandler implements EventHandler{
 	
 	@Override
 	public void onConnectionEnd(User user , int code , String reason , boolean remote) {
+		System.out.println("User disconnected, user: " + user);
 		server.userMap.remove(user.getAddress());
 		user.setUserStatus(UserStatus.CLOSED);
 		Logger.debug("Connection ended");
