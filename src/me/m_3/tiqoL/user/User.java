@@ -22,6 +22,8 @@ public class User {
 	InetSocketAddress address;
 	WebSocket socket;
 	
+	String unsafeOldSessionKey = null;
+	
 	public JSONObject getParameters() {
 		return parameters;
 	}
@@ -73,6 +75,14 @@ public class User {
 		for( int i = 0; i < len; i++ ) 
 			sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
 		secretKey = sb.toString();
+	}
+	
+	public void setUnsafeOldSessionKey(String unsafeOldSessionKey) {
+		this.unsafeOldSessionKey = unsafeOldSessionKey;
+	}
+	
+	public String getUnsafeOldSessionKey() {
+		return unsafeOldSessionKey;
 	}
 	
 	/**
