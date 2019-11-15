@@ -18,7 +18,6 @@ public class SessionStorage{
 	
 	Nitrite sessiondata;
 	NitriteCollection security;
-	NitriteCollection data;
 	
 	static org.slf4j.Logger Logger = LoggerFactory.getLogger(WSServer.class);
 	
@@ -30,7 +29,6 @@ public class SessionStorage{
 		sessiondata = Nitrite.builder().openOrCreate();
 		
 		security = sessiondata.getCollection("security");
-		data = sessiondata.getCollection("data");
 		
 	}
 	

@@ -178,6 +178,7 @@ public class Main {
     	});
     	
     	server.loadCore();
+
     	this.webSocketServer.run();
     }
     
