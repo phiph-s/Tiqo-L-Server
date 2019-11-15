@@ -144,7 +144,7 @@ public class EventManager {
 			textInputHandlers.get(id).onInput(user, id, text);
 		}
 		catch(Exception ex) {
-			Logger.error("Error in EventHandler " + checkboxHandlers.get(id).getClass().getName() + " on HTMLTextInput (id: "+id+"):");
+			Logger.error("Error in EventHandler " + textInputHandlers.get(id).getClass().getName() + " on HTMLTextInput (id: "+id+"):");
 			ex.printStackTrace();
 		}
 	}

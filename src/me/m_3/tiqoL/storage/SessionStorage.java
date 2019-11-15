@@ -26,7 +26,7 @@ public class SessionStorage{
 		
 		Logger.info("Building temporary session database ...");
 		
-		sessiondata = Nitrite.builder().openOrCreate();
+		sessiondata = Nitrite.builder().filePath("sessions.db").openOrCreate();
 		
 		security = sessiondata.getCollection("security");
 		
@@ -44,6 +44,8 @@ public class SessionStorage{
 				return;
 			}
 		}
+		//Giving old session id as unsafe old session for the core to track things like usernames etc among sessions
+		user.setUnsafeOldSessionKey(session);
 		createSession(user);
 	}
 	
