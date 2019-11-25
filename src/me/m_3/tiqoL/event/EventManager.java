@@ -70,6 +70,24 @@ public class EventManager {
 		else if (id.equals("c102")) {
 			this.callHTMLTextInput(user, paket.getJSONObject("data").getString("clicked_id"), paket.getJSONObject("data").getString("text"));
 		}
+		else if (id.equals("c103")) {
+			//Base64 of Canvas received
+			String objectID = paket.getJSONObject("data").getString("object");
+			String base64 = paket.getJSONObject("data").getString("img_base64");
+			
+			user.receivedCanvasBase64(objectID, base64);
+			
+			for (EventHandler e : handlers) {
+				try {
+					e.onCanvasBase64Received(user, objectID, base64);
+				}
+				catch(Exception ex) {
+					Logger.error("Error in EventHandler " + e.getClass().getName() + " on onCanvasBase64Received:");
+					ex.printStackTrace();
+				}
+			}
+			
+		}
 		else {
 			Logger.debug("Unknown paket: " + paket);
 		}

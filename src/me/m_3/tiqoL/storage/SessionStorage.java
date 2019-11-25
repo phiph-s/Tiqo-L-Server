@@ -71,7 +71,7 @@ public class SessionStorage{
 			restore.getSocket().close(1000);
 			restore.setSocket(user.getSocket());
 			restore.setaddress(user.getAddress());
-			
+			restore.setClientVersion(user.getClientVersion());
 			
 			restore.resendHeaderTags();
 			

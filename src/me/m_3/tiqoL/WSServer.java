@@ -313,6 +313,9 @@ public class WSServer extends WebSocketServer {
 			
 			User user = new User(this , conn);
 			
+			if (data.has("version"))
+				user.setClientVersion(data.getString("version"));
+			
 			if (data.getBoolean("resume_session")) {
 				boolean double_connection = false;
 				for (User u : this.userMap.values()) {

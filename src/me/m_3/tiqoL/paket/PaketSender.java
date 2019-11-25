@@ -41,4 +41,11 @@ public class PaketSender {
 		String send = PaketBuilder.createPaket("s04", obj);
 		user.getSocket().send(send);
 	}
+	
+	public static void sendCanvasBase64Request(WSServer server , User user , String objectID) {
+		JSONObject obj = new JSONObject();
+		obj.put("object", objectID);
+		String send = PaketBuilder.createPaket("s05", obj);
+		user.getSocket().send(send);
+	}
 }

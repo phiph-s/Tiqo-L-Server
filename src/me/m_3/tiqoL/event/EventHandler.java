@@ -12,4 +12,8 @@ public interface EventHandler {
 		
 	}
 	
+	public default void onCanvasBase64Received(User user , String objectID , String base64) {
+		
+	}
+	
 }
