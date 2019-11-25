@@ -42,6 +42,11 @@ public class EventManager {
 		
 		if (id.equals("c01")) {
 			user.setParameters(paket.getJSONObject("data").getJSONObject("parameters"));
+			//If smooth connecting dont redirect
+			if (this.server.isSmoothResuming.contains(user)) {
+				this.server.isSmoothResuming.remove(user);
+				return;
+			}
 			for (EventHandler e : handlers) {
 				try {
 					e.onHandshakeComplete(user, secret);

@@ -15,6 +15,7 @@ import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.jar.JarEntry;
@@ -135,9 +136,9 @@ import me.m_3.tiqoL.user.UserStatus;
 
 public class WSServer extends WebSocketServer {
 	
-	HashMap<InetSocketAddress , User> userMap = new HashMap<InetSocketAddress , User>();
+	HashMap<String , User> userMap = new HashMap<String , User>();
 	
-	public HashMap<InetSocketAddress , User> getUserMap(){
+	public HashMap<String , User> getUserMap(){
 		return userMap;
 	}
 	
@@ -275,16 +276,23 @@ public class WSServer extends WebSocketServer {
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		Logger.info("new connection on " + conn.getRemoteSocketAddress());
+		conn.setAttachment(conn.getRemoteSocketAddress().toString());
 	}
 
    /**
     * Method that gets called when a Connection is being closed.
-    * It redirects to the EventManager
+    * It redirects to the EventManagerv
     */
 	
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-		this.getEventManager().callConnectionEndEvent(this.userMap.get(conn.getRemoteSocketAddress()) , code , reason , remote);
+		String socketAdress = conn.getAttachment();
+		if (this.sessionStorage.no_close_event.contains(socketAdress)) {
+			this.sessionStorage.no_close_event.remove(socketAdress);
+			Logger.info("A session that has been taken control of by another connection has been timed out. No event has been called.");
+			return;
+		}
+		this.getEventManager().callConnectionEndEvent(this.userMap.get(socketAdress) , code , reason , remote);
 	}
 
    /**
@@ -292,12 +300,14 @@ public class WSServer extends WebSocketServer {
     * The paket is given to the PaketAuthentificator for authentification.
     */
 	
+	public ArrayList<User> isSmoothResuming = new ArrayList<User>();
+	
 	@Override
 	public void onMessage(WebSocket conn, String message) {
 		
 		JSONObject paket = new JSONObject(message);
 		
-		if (paket.getString("id").equals("c00") && !this.userMap.containsKey(conn.getRemoteSocketAddress())) {
+		if (paket.getString("id").equals("c00") && !this.userMap.containsKey(conn.getRemoteSocketAddress().toString())) {
 			
 			JSONObject data = (JSONObject) paket.get("data");
 			
@@ -306,13 +316,14 @@ public class WSServer extends WebSocketServer {
 			if (data.getBoolean("resume_session")) {
 				boolean double_connection = false;
 				for (User u : this.userMap.values()) {
-					if (u.getSessionKey().equals(data.getString("session")) && u.getUserStatus() == UserStatus.OPEN) {
+					if (u.getSessionKey().equals(data.getString("session")) && u.getUserStatus() == UserStatus.OPEN && u.getSecretKey().equals(data.getString("secret"))) {
 						sessionStorage.createSession(user);	
 						double_connection = true;
 					}
 				}
-				if (!double_connection)
-					sessionStorage.restoreSession(user, data.getString("secret"), data.getString("session"));
+				user = sessionStorage.restoreSession(user, data.getString("secret"), data.getString("session") , double_connection);
+				if (double_connection)
+					this.isSmoothResuming.add(user);
 			}
 			else {
 				sessionStorage.createSession(user);
@@ -325,11 +336,11 @@ public class WSServer extends WebSocketServer {
 			
 			conn.send(PaketBuilder.createPaket("s00", send));
 			
-			userMap.put(conn.getRemoteSocketAddress() , user);
+			userMap.put(conn.getRemoteSocketAddress().toString() , user);
 			
 		}
 		else {
-			this.paketAuthentificator.handlePakage(this.userMap.get(conn.getRemoteSocketAddress()), paket);			
+			this.paketAuthentificator.handlePakage(this.userMap.get(conn.getRemoteSocketAddress().toString()), paket);			
 		}
 	}
 
@@ -339,14 +350,24 @@ public class WSServer extends WebSocketServer {
 
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
+		Logger.error("Forwarded to onError in WSServer:");
+		ex.printStackTrace();
+
+		if (conn == null) return;
+		
+		String socketAdress = conn.getAttachment();
+		
+		if (this.sessionStorage.no_close_event.contains(socketAdress)) {
+			this.sessionStorage.no_close_event.remove(socketAdress);
+			return;
+		}
 		if (this.getUserMap() != null && conn != null) {
-			if (this.getUserMap().containsKey(conn.getRemoteSocketAddress())) {
-				this.getEventManager().callConnectionEndEvent(this.userMap.get(conn.getRemoteSocketAddress()) , 0 , null , true);
+			if (this.getUserMap().containsKey(socketAdress)) {
+				this.getEventManager().callConnectionEndEvent(this.userMap.get(socketAdress) , 0 , null , true);
 			}
 		}
 		if (conn != null)
-			Logger.error("an error occured on connection " + conn.getRemoteSocketAddress()  + ":" + ex);
-		ex.printStackTrace();
+			Logger.error("an error occured on connection " + socketAdress + ":" + ex);
 	}
 	
    /**

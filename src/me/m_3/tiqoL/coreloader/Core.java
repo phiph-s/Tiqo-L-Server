@@ -42,7 +42,7 @@ public class Core {
 	}
 	
 	public User getUser(InetSocketAddress adress) {
-		return this.getServer().getUserMap().get(adress);
+		return this.getServer().getUserMap().get(adress.toString());
 	}
 	
 	public Collection<User> getUsers() {

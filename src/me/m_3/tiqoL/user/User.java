@@ -4,9 +4,12 @@ package me.m_3.tiqoL.user;
 
 import java.net.InetSocketAddress;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.htmlbuilder.box.HTMLBox;
@@ -31,6 +34,7 @@ public class User {
 	public void setParameters(JSONObject parameters) {
 		this.parameters = parameters;
 	}
+	static org.slf4j.Logger Logger = LoggerFactory.getLogger(User.class);
 
 	JSONObject parameters;
 	
@@ -38,6 +42,8 @@ public class User {
 	
 	HTMLBox htmlBox;
 	WSServer server;
+	
+	ArrayList<String> headerTags = new ArrayList<String>();
 	
 	public User (WSServer server , WebSocket socket) {
 		
@@ -51,22 +57,47 @@ public class User {
 	
 	public void setHTMLBox (HTMLBox box) throws Exception {
 		this.htmlBox = box;
-		PaketSender.sendRebuildHTMLPaket(server, this, this.htmlBox.toJSON());
+		if (this.userStatus == UserStatus.OPEN)
+			PaketSender.sendRebuildHTMLPaket(server, this, this.htmlBox.toJSON());
+		else {
+			Logger.error("Setting HTMLBox on an closed user. Bug in core. Following trace:");
+
+
+			for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+			    Logger.error(ste.toString());
+			}
+
+
+		}
 	}
 	
-	public void alert (String s) {
+	public void alert (String s) throws WebsocketNotConnectedException{
+		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.sendAlertPaket(server, this, s);
 	}
 	
-	public void addHeaderTag(String tag) {
+	public void addHeaderTag(String tag) throws WebsocketNotConnectedException{
+		this.headerTags.add(tag);
+		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.sendHeaderTagPaket(server, this, tag);
 	}
 	
-	public void clearHeaderTags() {
+	public void resendHeaderTags() throws WebsocketNotConnectedException{
+		String doSend = "";
+		for (String s : this.headerTags) {
+			doSend += s;
+		}
+		if (this.userStatus == UserStatus.OPEN)
+		PaketSender.sendHeaderTagPaket(server, this, doSend);
+	}
+	
+	public void clearHeaderTags() throws WebsocketNotConnectedException{
+		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.clearHeaderTagsPaket(server, this);
 	}
 	
-	public void setTitle(String title) {
+	public void setTitle(String title) throws WebsocketNotConnectedException{
+		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.sendTitlePaket(server, this, title);
 	}
 

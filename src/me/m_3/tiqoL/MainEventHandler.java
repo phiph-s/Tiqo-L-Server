@@ -41,7 +41,7 @@ public class MainEventHandler implements EventHandler{
 			Logger.debug("An connection ended whilst not being completely established.");
 			return;
 		}
-		server.userMap.remove(user.getAddress());
+		server.userMap.remove(user.getAddress().toString());
 		user.setUserStatus(UserStatus.CLOSED);
 	}
 	
