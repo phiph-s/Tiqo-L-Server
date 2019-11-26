@@ -3,6 +3,7 @@ package me.m_3.tiqoL.paket;
 import org.json.JSONObject;
 
 import me.m_3.tiqoL.WSServer;
+import me.m_3.tiqoL.htmlbuilder.HTMLObject;
 import me.m_3.tiqoL.user.User;
 
 public class PaketSender {
@@ -42,10 +43,25 @@ public class PaketSender {
 		user.getSocket().send(send);
 	}
 	
-	public static void sendCanvasBase64Request(WSServer server , User user , String objectID) {
+	public static void sendCanvasBase64RequestPaket(WSServer server , User user , String objectID) {
 		JSONObject obj = new JSONObject();
 		obj.put("object", objectID);
 		String send = PaketBuilder.createPaket("s05", obj);
+		user.getSocket().send(send);
+	}
+	
+	public static void sendVibratePaket(WSServer server , User user , Integer[] rythm) {
+		JSONObject obj = new JSONObject();
+		obj.put("rythm", rythm);
+		String send = PaketBuilder.createPaket("s102", obj);
+		user.getSocket().send(send);
+	}
+	
+	public static void sendUpdateCustomDataPaket(WSServer server , User user , HTMLObject object) {
+		JSONObject obj = new JSONObject();
+		obj.put("object", object.getObjectID());
+		obj.put("custom_data", object.getCustomData());
+		String send = PaketBuilder.createPaket("s06", obj);
 		user.getSocket().send(send);
 	}
 }

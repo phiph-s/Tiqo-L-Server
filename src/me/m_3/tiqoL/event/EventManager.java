@@ -74,9 +74,7 @@ public class EventManager {
 			//Base64 of Canvas received
 			String objectID = paket.getJSONObject("data").getString("object");
 			String base64 = paket.getJSONObject("data").getString("img_base64");
-			
-			user.receivedCanvasBase64(objectID, base64);
-			
+						
 			for (EventHandler e : handlers) {
 				try {
 					e.onCanvasBase64Received(user, objectID, base64);

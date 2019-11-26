@@ -5,7 +5,6 @@ package me.m_3.tiqoL.user;
 import java.net.InetSocketAddress;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
@@ -47,9 +46,7 @@ public class User {
 	WSServer server;
 	
 	ArrayList<String> headerTags = new ArrayList<String>();
-	
-	HashMap<String, String> canvasBase64 = new HashMap<String, String>();
-	
+		
 	public User (WSServer server , WebSocket socket) {
 		
 		this.socket = socket;
@@ -58,25 +55,6 @@ public class User {
 		this.htmlBox = new HTMLBox(server , this);
 		generateSecretKey(2056);
 		
-	}
-	
-	public boolean hasReceivedCanvasBase64(String objectID) {
-		if (this.canvasBase64.containsKey(objectID)) {
-			return true;
-		}
-		return false;
-	}
-	
-	public String getCanvasBase64(String objectID) {
-		return this.canvasBase64.get(objectID);
-	}
-	
-	public void clearCanvasBase64(String objectID) {
-		this.canvasBase64.remove(objectID);
-	}
-	
-	public void receivedCanvasBase64(String objectID , String base64) {
-		this.canvasBase64.put(objectID, base64);
 	}
 	
 	public void setHTMLBox (HTMLBox box) throws Exception {
@@ -93,6 +71,11 @@ public class User {
 
 
 		}
+	}
+	
+	public void vibrate(Integer[] rythm) {
+		if (this.userStatus == UserStatus.OPEN)
+		PaketSender.sendVibratePaket(server, this, rythm);
 	}
 	
 	public void alert (String s) throws WebsocketNotConnectedException{

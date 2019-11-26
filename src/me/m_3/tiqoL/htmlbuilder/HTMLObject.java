@@ -22,6 +22,8 @@ public class HTMLObject {
 	
 	ArrayList<HTMLObject> children = new ArrayList<HTMLObject>();
 	
+	private JSONObject customData = new JSONObject();
+	
 	public String insideText = "";
 	
 	HTMLClickHandler clickHandler = null;
@@ -38,6 +40,8 @@ public class HTMLObject {
 		obj.put("id", id);
 		obj.put("insideText", insideText);
 		obj.put("css", css);
+		
+		obj.put("customData", this.getCustomData());
 		
 		attributes.remove("id");
 		attributes.remove("onclick");
@@ -158,6 +162,14 @@ public class HTMLObject {
 	
 	public void disable() {
 		this.protected_attributes.put("disabled" , "true");
+	}
+
+	public JSONObject getCustomData() {
+		return customData;
+	}
+
+	public void setCustomData(JSONObject customData) {
+		this.customData = customData;
 	}
 	
 }
