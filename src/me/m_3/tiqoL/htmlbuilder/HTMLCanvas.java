@@ -11,6 +11,10 @@ public class HTMLCanvas extends HTMLObject{
 		this.tiqo_object = "canvas";
 	}
 	
+	public void setBase64(String string) {
+		this.getCustomData().put("image", string);
+	}
+	
 	public void requestBase64(WSServer server , User user) {
 		PaketSender.sendCanvasBase64RequestPaket(server, user, this.id);
 	}
