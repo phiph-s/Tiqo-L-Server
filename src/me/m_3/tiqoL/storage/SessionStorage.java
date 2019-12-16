@@ -8,6 +8,7 @@ import org.dizitart.no2.Document;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteCollection;
 import org.dizitart.no2.filters.Filters;
+import org.dizitart.no2.tool.Recovery;
 import org.slf4j.LoggerFactory;
 
 import me.m_3.tiqoL.WSServer;
@@ -29,8 +30,13 @@ public class SessionStorage{
 		this.server = server;
 		
 		Logger.info("Building temporary session database ...");
-		
-		sessiondata = Nitrite.builder().filePath("sessions.db").openOrCreate();
+		try {
+			sessiondata = Nitrite.builder().filePath("sessions.db").openOrCreate();
+		}
+		catch(Exception ex) {
+			Recovery.recover("sessions.db");
+			sessiondata = Nitrite.builder().filePath("sessions.db").openOrCreate();
+		}
 		
 		security = sessiondata.getCollection("security");
 		

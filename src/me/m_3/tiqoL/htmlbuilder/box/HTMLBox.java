@@ -215,6 +215,24 @@ public class HTMLBox {
 		}
 	}
 	
+	public void removeObject(HTMLObject object , boolean send) throws UnknownObjectIDException {
+		HTMLObject parent = this.searchParent(this.getBody(), object.getObjectID());
+		if (parent == null) throw new UnknownObjectIDException();
+		parent.removeChild(object);
+		this.buildDirectAccess(this.body);
+		if (send) {
+			PaketSender.sendRemoveObjectPaket(server, user, object);
+		}
+	}
+	
+	public void addObjectToBody(HTMLObject object , boolean send) {
+		this.body.addChild(object);
+		this.buildDirectAccess(this.body);
+		if (send) {
+			PaketSender.sendAddObjectToBodyPaket(server, user, object);
+		}
+	}
+	
 	public HTMLObject searchObject(HTMLObject from , String objectID) {
 		for (HTMLObject o : from.getChildren()) {
 			if (o.getObjectID().equals(objectID)) {
