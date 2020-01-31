@@ -1,5 +1,5 @@
 # Tiqo-L (Server)
-[![Actions Status](https://github.com/MeLays/Tiqo-L-Server/workflows/maven.yml/badge.svg)](https://github.com/MeLays/Tiqo-L-Server/actions)
+![Java CI](https://github.com/MeLays/Tiqo-L-Server/workflows/Java%20CI/badge.svg)
 
 Tiqo-L-Server is a the backend server for tiqo-l. It is based on Java and used with the JavaScript-based Tiqo-L-Client.
 But before you start it is essential for you to know what the exact purpose of Tiqo-L is:
