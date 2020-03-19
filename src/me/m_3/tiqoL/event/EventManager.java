@@ -86,6 +86,22 @@ public class EventManager {
 			}
 			
 		}
+		//Custom Paket received
+		else if (id.equals("c104")) {
+			//Base64 of Canvas received
+			JSONObject data = paket.getJSONObject("data");
+			
+			for (EventHandler e : handlers) {
+				try {
+					e.onCustomDataReceived(user, data);
+				}
+				catch(Exception ex) {
+					Logger.error("Error in EventHandler " + e.getClass().getName() + " on onCustomDataReceived:");
+					ex.printStackTrace();
+				}
+			}
+			
+		}
 		else {
 			Logger.debug("Unknown paket: " + paket);
 		}

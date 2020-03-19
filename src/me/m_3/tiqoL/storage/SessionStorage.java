@@ -1,7 +1,11 @@
 package me.m_3.tiqoL.storage;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.dizitart.no2.Cursor;
 import org.dizitart.no2.Document;
@@ -25,11 +29,13 @@ public class SessionStorage{
 	static org.slf4j.Logger Logger = LoggerFactory.getLogger(WSServer.class);
 	
 	public ArrayList<String> no_close_event = new ArrayList<String>();
+
+	private ScheduledExecutorService scheduler;
 	
 	public SessionStorage(WSServer server) {
 		this.server = server;
 		
-		Logger.info("Building temporary session database ...");
+		Logger.info("Building session database ...");
 		try {
 			sessiondata = Nitrite.builder().filePath("sessions.db").openOrCreate();
 		}
@@ -39,6 +45,35 @@ public class SessionStorage{
 		}
 		
 		security = sessiondata.getCollection("security");
+		
+		//Starting an save scheduler
+		//Start Thread Timer
+		this.scheduler = Executors.newSingleThreadScheduledExecutor();
+
+		Runnable task = new Runnable() {
+			public void run() {
+				int amount = 0;
+				for (Document doc : security.find()) {
+					if (!doc.containsKey("used")) {
+						updateSession((String) doc.get("session"));
+						continue;
+					}
+					
+					Long diff = Calendar.getInstance().getTimeInMillis() - doc.getLastModifiedTime();
+	        		Long diffHours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+
+	        		if (diffHours > 168) {
+	        			//Timeout session after 168 hours
+	        			security.remove(Filters.eq("session", doc.get("session")));
+	        			amount++;
+	        		}
+				}
+				System.out.println("Removed "+amount+" timed-out sessions from database to free up space...");
+        		scheduler.schedule(this, 60, TimeUnit.MINUTES);
+      		}
+		};
+		
+		scheduler.schedule(task, 10, TimeUnit.SECONDS);
 		
 	}
 	
@@ -52,6 +87,7 @@ public class SessionStorage{
 					Document doc = new Document().put("secret" , user.getSecretKey()).put("session", session);
 					security.insert(doc);
 					Logger.info(user.getAddress() + " resumed session: " + session);
+					this.updateSession(session);
 					return user;
 				}
 			}
@@ -83,6 +119,8 @@ public class SessionStorage{
 			
 			Logger.info(user.getAddress() + " has taken control of running session " + session);
 			
+			this.updateSession(session);
+			
 			//Restore current display state
 			try {
 				restore.setHTMLBox(restore.getHtmlBox());
@@ -95,9 +133,18 @@ public class SessionStorage{
 		}
 	}
 	
+	public void updateSession(String session_id) {
+		int used = 0;
+		Document session = security.find(Filters.eq("session", session_id)).firstOrDefault();
+		if (session.containsKey("used")) {
+			used = (int) session.get("used");
+		}
+		security.update(Filters.eq("session", session_id), new Document().put("used", used + 1));
+	}
+	
 	public void createSession(User user) {
 		UUID session_id = UUID.randomUUID();
-		Document doc = new Document().put("secret" , user.getSecretKey()).put("session", session_id.toString());
+		Document doc = new Document().put("secret" , user.getSecretKey()).put("session", session_id.toString()).put("used", 0);
 		security.insert(doc);
 		user.setSessionKey(session_id.toString());
 		Logger.info(user.getAddress() + " temporary session key: " + session_id);

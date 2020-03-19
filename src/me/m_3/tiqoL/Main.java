@@ -179,7 +179,7 @@ public class Main {
     	
     	server.loadCore();
 
-    	this.webSocketServer.setConnectionLostTimeout(10);
+    	this.webSocketServer.setConnectionLostTimeout(30);
     	this.webSocketServer.run();
     }
     

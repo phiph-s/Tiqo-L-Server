@@ -31,7 +31,7 @@ public class HTMLBox {
 	
 	private HashMap<String , HTMLObject> direct_access = new HashMap<String , HTMLObject>();
 	
-	static org.slf4j.Logger Logger = LoggerFactory.getLogger(WSServer.class);
+	static org.slf4j.Logger Logger = LoggerFactory.getLogger(HTMLBox.class);
 	
 	public HTMLBox(WSServer server , User user) {
 		this.server = server;
@@ -161,7 +161,10 @@ public class HTMLBox {
 	}
 	
 	private boolean check(HTMLObject object , ArrayList<String> visited) {
-		if (visited.contains(object.getObjectID())) return false;
+		if (visited.contains(object.getObjectID())) {
+			Logger.warn("WARNING: HTMLBody contains not-unique ObjectID "+object.getObjectID()+"!");
+			return false;
+		}
 		visited.add(object.getObjectID());
 		for (HTMLObject ho : object.getChildren()) {
 			if (!check(ho, visited)) return false;
@@ -181,12 +184,8 @@ public class HTMLBox {
 		this.getDirectAccess().clear();
 		buildDirectAccess(this.body);
 		if (!check(body , new ArrayList<String>())) {
-			Logger.warn("WARNING: HTMLBody contains not-unique ObjectID's! This can cause serious problems when handling events!");
+			Logger.warn("This can cause serious problems when handling events!");
 		}
-		if (user != null && server != null) {
-			PaketSender.sendRebuildHTMLPaket(server, user, this.toJSON());
-		}
-		
 	}
 	
 	public HTMLBody getBody() {
