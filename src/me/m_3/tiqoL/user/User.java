@@ -48,12 +48,11 @@ public class User {
 	ArrayList<String> headerTags = new ArrayList<String>();
 		
 	public User (WSServer server , WebSocket socket) {
-		
 		this.socket = socket;
 		this.address = socket.getRemoteSocketAddress();
 		this.server = server;
 		this.htmlBox = new HTMLBox(server , this);
-		generateSecretKey(2056);
+		generateSecretKey(256);
 		
 	}
 	
@@ -71,6 +70,10 @@ public class User {
 
 
 		}
+	}
+	
+	public boolean hasBufferedData() {
+		return socket.hasBufferedData();
 	}
 	
 	public void vibrate(Integer[] rythm) {

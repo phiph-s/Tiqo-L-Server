@@ -7,6 +7,6 @@ INFO -    `--'   `--' `-|  | `---'        `-----'
 INFO -                  `--'
 INFO - Building session database ...
 INFO - Starting content server on port 9985 ...
-INFO - ContentServer is serving at localhost:9985
+ERROR - ContentServer is offline. Won't be able to serve content
 ERROR - No core provided! Place a core inside the /core folder!
 INFO - Server shut down.
