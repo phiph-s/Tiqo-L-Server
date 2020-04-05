@@ -77,6 +77,22 @@ public class SessionStorage{
 		
 	}
 	
+	public void setCustomData(String session_id, String key, String data) {
+		if (security.find(Filters.eq("session", session_id)).size() == 0) return;
+		if (key.equalsIgnoreCase("secret") || key.equalsIgnoreCase("session") || key.equalsIgnoreCase("used")) return;
+		security.update(Filters.eq("session", session_id), new Document().put(key, data));
+	}
+	
+	public String getCustomData(String session_id, String key) {
+		Cursor cursor = security.find(Filters.eq("session", session_id));
+		if (cursor.size() == 0) return null;
+		Document session = security.find(Filters.eq("session", session_id)).firstOrDefault();
+		if (key.equalsIgnoreCase("secret") || key.equalsIgnoreCase("session") || key.equalsIgnoreCase("used")) return null;
+		
+		if (!session.containsKey(key)) return null;
+		return (String) session.get(key);
+	}
+	
 	public User restoreSession(User user , String old_secret , String session, boolean doubleSession) {
 		if (!doubleSession) {
 			Cursor cursor = security.find(Filters.eq("session", session));

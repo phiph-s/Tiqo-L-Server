@@ -416,4 +416,8 @@ public class WSServer extends WebSocketServer {
 		this.contentServer = contentServer;
 	}
 	
+	public SessionStorage getSessionStorage() {
+		return sessionStorage;
+	}
+	
 }
