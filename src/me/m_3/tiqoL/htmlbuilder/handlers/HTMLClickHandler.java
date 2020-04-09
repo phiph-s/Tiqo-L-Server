@@ -8,4 +8,9 @@ public interface HTMLClickHandler {
 		
 	}
 	
+	public default void onRightClick(User user , String htmlObject) {
+		
+	}
+	
+	
 }

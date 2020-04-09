@@ -26,6 +26,18 @@ public class HTMLCanvas extends HTMLObject{
 		return this;
 	}
 	
+	public HTMLCanvas drawableSendOnlyDifferences() {
+		this.getCustomData().put("drawable_onlydiff", true);
+		return this;
+	}
+	
+	public HTMLCanvas updateDiffBase64(WSServer server, User user, String diffBase64) {
+		this.getCustomData().put("diff_base64", diffBase64);
+		PaketSender.sendUpdateCustomDataPaket(server, user, this);
+		this.getCustomData().remove("diff_base64");
+		return this;
+	}
+	
 	public HTMLCanvas drawableSetColor(String color) {
 		this.getCustomData().put("color" , color);
 		return this;

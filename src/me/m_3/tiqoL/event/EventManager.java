@@ -88,7 +88,6 @@ public class EventManager {
 		}
 		//Custom Paket received
 		else if (id.equals("c104")) {
-			//Base64 of Canvas received
 			JSONObject data = paket.getJSONObject("data");
 			
 			for (EventHandler e : handlers) {
@@ -101,6 +100,10 @@ public class EventManager {
 				}
 			}
 			
+		}
+		//Rightclick event captured
+		else if (id.equals("c105")) {
+			this.callHTMLRightclick(user, paket.getJSONObject("data").getString("clicked_id"));
 		}
 		else {
 			Logger.debug("Unknown paket: " + paket);
@@ -134,6 +137,20 @@ public class EventManager {
 		}
 		try {
 			clickHandlers.get(id).onClick(user, id, x, y, pageX, pageY);
+		}
+		catch(Exception ex) {
+			Logger.error("Error in EventHandler " + clickHandlers.get(id).getClass().getName() + " on HTMLClick (id: "+id+"):");
+			ex.printStackTrace();
+		}
+	}
+	
+	public void callHTMLRightclick(User user , String id) {
+		if (!clickHandlers.containsKey(id)) {
+			Logger.warn("Unused incoming click event on id " + id);
+			return;
+		}
+		try {
+			clickHandlers.get(id).onRightClick(user, id);
 		}
 		catch(Exception ex) {
 			Logger.error("Error in EventHandler " + clickHandlers.get(id).getClass().getName() + " on HTMLClick (id: "+id+"):");
