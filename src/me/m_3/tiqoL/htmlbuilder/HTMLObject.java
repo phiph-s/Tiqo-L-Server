@@ -6,8 +6,11 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
+import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.event.EventManager;
 import me.m_3.tiqoL.htmlbuilder.handlers.HTMLClickHandler;
+import me.m_3.tiqoL.paket.PaketSender;
+import me.m_3.tiqoL.user.User;
 
 public class HTMLObject {
 	
@@ -123,6 +126,12 @@ public class HTMLObject {
 		if (!children.contains(o)) {
 			children.add(o);
 		}
+		return this;
+	}
+	
+	public HTMLObject addChildAndSend(WSServer server, User user, HTMLObject o) {
+		this.addChild(o);
+		PaketSender.sendAddChildPaket(server, user, this.getObjectID(), o);
 		return this;
 	}
 	

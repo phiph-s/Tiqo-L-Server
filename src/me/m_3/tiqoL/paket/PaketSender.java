@@ -59,6 +59,14 @@ public class PaketSender {
 		user.getSocket().send(send);
 	}
 	
+	public static void sendAddChildPaket(WSServer server, User user, String addToObjectID, HTMLObject object) {
+		JSONObject obj = new JSONObject();
+		obj.put("addToObjectID", addToObjectID);
+		obj.put("object", object.toJSON(true));
+		String send = PaketBuilder.createPaket("s09", obj);
+		user.getSocket().send(send);
+	}
+	
 	public static void sendTitlePaket(WSServer server , User user , String message) {
 		JSONObject obj = new JSONObject();
 		String send = PaketBuilder.createPaket("s100", obj.put("title", message));
