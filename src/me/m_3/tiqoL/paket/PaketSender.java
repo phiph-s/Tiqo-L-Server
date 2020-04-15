@@ -85,4 +85,12 @@ public class PaketSender {
 		String send = PaketBuilder.createPaket("s102", obj);
 		user.getSocket().send(send);
 	}
+	
+	public static void sendAudioPaket(WSServer server , User user , String path , double volume) {
+		JSONObject obj = new JSONObject();
+		obj.put("audiosrc", path);
+		obj.put("volume", volume);
+		String send = PaketBuilder.createPaket("s103", obj);
+		user.getSocket().send(send);
+	}
 }

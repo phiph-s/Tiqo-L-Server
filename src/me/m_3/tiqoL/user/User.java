@@ -76,6 +76,16 @@ public class User {
 		return socket.hasBufferedData();
 	}
 	
+	public void playAudio(String path) {
+		if (this.userStatus == UserStatus.OPEN)
+			PaketSender.sendAudioPaket(server, this, path , 1.0);
+	}
+	
+	public void playAudio(String path , double volume) {
+		if (this.userStatus == UserStatus.OPEN)
+			PaketSender.sendAudioPaket(server, this, path , volume);
+	}
+	
 	public void vibrate(Integer[] rythm) {
 		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.sendVibratePaket(server, this, rythm);

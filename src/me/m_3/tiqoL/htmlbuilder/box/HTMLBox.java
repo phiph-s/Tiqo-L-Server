@@ -38,6 +38,10 @@ public class HTMLBox {
 		this.user = user;
 	}
 	
+	public WSServer getServer() {
+		return server;
+	}
+	
 	public void fromJSON (JSONObject json) {
 		HTMLBody body = new HTMLBody();
 		if (!json.getString("type").equals("body")){

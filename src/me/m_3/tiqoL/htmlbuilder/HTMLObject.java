@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
-import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.event.EventManager;
 import me.m_3.tiqoL.htmlbuilder.handlers.HTMLClickHandler;
 import me.m_3.tiqoL.paket.PaketSender;
@@ -129,9 +128,10 @@ public class HTMLObject {
 		return this;
 	}
 	
-	public HTMLObject addChildAndSend(WSServer server, User user, HTMLObject o) {
+	public HTMLObject addChildAndSend(User user, HTMLObject o) {
 		this.addChild(o);
-		PaketSender.sendAddChildPaket(server, user, this.getObjectID(), o);
+		PaketSender.sendAddChildPaket(user.getHtmlBox().getServer() , user, this.getObjectID(), o);
+		user.getHtmlBox().buildDirectAccess(user.getHtmlBox().getBody());
 		return this;
 	}
 	
