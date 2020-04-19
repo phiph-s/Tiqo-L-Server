@@ -1,5 +1,7 @@
 package me.m_3.tiqoL.htmlbuilder;
 
+import org.json.JSONArray;
+
 import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.paket.PaketSender;
 import me.m_3.tiqoL.user.User;
@@ -26,15 +28,10 @@ public class HTMLCanvas extends HTMLObject{
 		return this;
 	}
 	
-	public HTMLCanvas drawableSendOnlyDifferences() {
-		this.getCustomData().put("drawable_onlydiff", true);
-		return this;
-	}
-	
-	public HTMLCanvas updateDiffBase64(WSServer server, User user, String diffBase64) {
-		this.getCustomData().put("diff_base64", diffBase64);
-		PaketSender.sendUpdateCustomDataPaket(server, user, this);
-		this.getCustomData().remove("diff_base64");
+	public HTMLCanvas setDrawableSendPathUpdates(int resolution , int max_lenght) {
+		this.getCustomData().put("drawable_send_paths", true);
+		this.getCustomData().put("drawable_path_resolution", resolution);
+		this.getCustomData().put("drawable_path_lenght", max_lenght);
 		return this;
 	}
 	
@@ -50,6 +47,10 @@ public class HTMLCanvas extends HTMLObject{
 	
 	public void updateDrawableSettings(WSServer server, User user) {
 		PaketSender.sendUpdateCustomDataPaket(server, user, this);
+	}
+	
+	public void sendPathToDraw(WSServer server, User user , JSONArray path, String color, int width) {
+		PaketSender.sendCanvasDrawPathPaket(server, user, this, path, color, width);
 	}
 	
 }

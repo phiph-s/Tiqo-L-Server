@@ -57,6 +57,7 @@ public class EventManager {
 				}
 			}
 		}
+		
 		else if (id.equals("c100")) {
 			this.callHTMLClick(user, paket.getJSONObject("data").getString("clicked_id"),
 					paket.getJSONObject("data").getDouble("x"),
@@ -64,12 +65,15 @@ public class EventManager {
 					paket.getJSONObject("data").getDouble("pageX"),
 					paket.getJSONObject("data").getDouble("pageY"));
 		}
+		
 		else if (id.equals("c101")) {
 			this.callHTMLCheckboxToggle(user, paket.getJSONObject("data").getString("clicked_id"), paket.getJSONObject("data").getBoolean("checked"));
 		}
+		
 		else if (id.equals("c102")) {
 			this.callHTMLTextInput(user, paket.getJSONObject("data").getString("clicked_id"), paket.getJSONObject("data").getString("text"));
 		}
+		
 		else if (id.equals("c103")) {
 			//Base64 of Canvas received
 			String objectID = paket.getJSONObject("data").getString("object");
@@ -86,6 +90,7 @@ public class EventManager {
 			}
 			
 		}
+		
 		//Custom Paket received
 		else if (id.equals("c104")) {
 			JSONObject data = paket.getJSONObject("data");
@@ -101,9 +106,23 @@ public class EventManager {
 			}
 			
 		}
+		
 		//Rightclick event captured
 		else if (id.equals("c105")) {
 			this.callHTMLRightclick(user, paket.getJSONObject("data").getString("clicked_id"));
+		}
+		
+		//Received path from canvas
+		else if (id.equals("c106")) {
+			for (EventHandler e : handlers) {
+				try {
+					e.onCanvasPathReceived(user, paket.getJSONObject("data").getJSONArray("path"), paket.getJSONObject("data").getString("color"), paket.getJSONObject("data").getInt("width"));
+				}
+				catch(Exception ex) {
+					Logger.error("Error in EventHandler " + e.getClass().getName() + " on onCanvasPathReceived:");
+					ex.printStackTrace();
+				}
+			}
 		}
 		else {
 			Logger.debug("Unknown paket: " + paket);

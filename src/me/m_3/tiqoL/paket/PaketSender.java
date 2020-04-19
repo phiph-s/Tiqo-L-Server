@@ -1,8 +1,10 @@
 package me.m_3.tiqoL.paket;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import me.m_3.tiqoL.WSServer;
+import me.m_3.tiqoL.htmlbuilder.HTMLCanvas;
 import me.m_3.tiqoL.htmlbuilder.HTMLObject;
 import me.m_3.tiqoL.user.User;
 
@@ -64,6 +66,18 @@ public class PaketSender {
 		obj.put("addToObjectID", addToObjectID);
 		obj.put("object", object.toJSON(true));
 		String send = PaketBuilder.createPaket("s09", obj);
+		user.getSocket().send(send);
+	}
+	
+	public static void sendCanvasDrawPathPaket(WSServer server, User user, HTMLCanvas canvas, JSONArray path, String color, int width) {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("object", canvas.getObjectID());
+		obj.put("path", path);
+		obj.put("color", color);
+		obj.put("width", width);
+		
+		String send = PaketBuilder.createPaket("s10", obj);
 		user.getSocket().send(send);
 	}
 	
