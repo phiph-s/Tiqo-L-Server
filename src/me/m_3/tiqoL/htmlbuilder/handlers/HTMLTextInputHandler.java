@@ -8,4 +8,9 @@ public interface HTMLTextInputHandler {
 		
 	}
 	
+	public default void onSubmit(User user , String htmlObject , String text) {
+		
+	}
+	
+	
 }

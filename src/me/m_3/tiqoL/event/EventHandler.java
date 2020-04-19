@@ -23,7 +23,7 @@ public interface EventHandler {
 		
 	}
 	
-	public default void onCanvasPathReceived(User user , JSONArray path, String color, int width) {
+	public default void onCanvasPathReceived(User user , String objectID, JSONArray path, String color, int width) {
 		
 	}
 	

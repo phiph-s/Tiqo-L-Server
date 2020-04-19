@@ -116,7 +116,7 @@ public class EventManager {
 		else if (id.equals("c106")) {
 			for (EventHandler e : handlers) {
 				try {
-					e.onCanvasPathReceived(user, paket.getJSONObject("data").getJSONArray("path"), paket.getJSONObject("data").getString("color"), paket.getJSONObject("data").getInt("width"));
+					e.onCanvasPathReceived(user, paket.getJSONObject("data").getString("object"), paket.getJSONObject("data").getJSONArray("path"), paket.getJSONObject("data").getString("color"), paket.getJSONObject("data").getInt("width"));
 				}
 				catch(Exception ex) {
 					Logger.error("Error in EventHandler " + e.getClass().getName() + " on onCanvasPathReceived:");
@@ -124,6 +124,12 @@ public class EventManager {
 				}
 			}
 		}
+		
+		//Rightclick event captured
+		else if (id.equals("c107")) {
+			this.callHTMLTextInputSubmit(user, paket.getJSONObject("data").getString("clicked_id"), paket.getJSONObject("data").getString("text"));
+		}
+		
 		else {
 			Logger.debug("Unknown paket: " + paket);
 		}
@@ -215,6 +221,19 @@ public class EventManager {
 		}
 		try {
 			textInputHandlers.get(id).onInput(user, id, text);
+		}
+		catch(Exception ex) {
+			Logger.error("Error in EventHandler " + textInputHandlers.get(id).getClass().getName() + " on HTMLTextInput (id: "+id+"):");
+			ex.printStackTrace();
+		}
+	}
+	public void callHTMLTextInputSubmit(User user , String id , String text) {
+		if (!textInputHandlers.containsKey(id)) {
+			Logger.warn("Unused incoming text input event on id " + id);
+			return;
+		}
+		try {
+			textInputHandlers.get(id).onSubmit(user, id, text);
 		}
 		catch(Exception ex) {
 			Logger.error("Error in EventHandler " + textInputHandlers.get(id).getClass().getName() + " on HTMLTextInput (id: "+id+"):");
