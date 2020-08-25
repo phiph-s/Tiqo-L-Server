@@ -15,6 +15,6 @@ package me.m_3.tiqoL;
 public class Description {
 	
 	public static final String name = "TiqoL";
-	public static final String version = "0.5 alpha release";
+	public static final String version = "0.9 alpha release";
 	
 }

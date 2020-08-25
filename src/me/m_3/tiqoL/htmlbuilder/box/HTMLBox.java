@@ -166,7 +166,7 @@ public class HTMLBox {
 	
 	private boolean check(HTMLObject object , ArrayList<String> visited) {
 		if (visited.contains(object.getObjectID())) {
-			Logger.warn("WARNING: HTMLBody contains not-unique ObjectID "+object.getObjectID()+"!");
+			Logger.warn("WARNING: HTMLBody contains non-unique ObjectID "+object.getObjectID()+"!");
 			return false;
 		}
 		visited.add(object.getObjectID());

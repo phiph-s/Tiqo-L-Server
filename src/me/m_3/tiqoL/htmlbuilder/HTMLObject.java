@@ -71,6 +71,10 @@ public class HTMLObject {
 		return obj;
 	}
 	
+	public void setTiqoFlags(String flags) {
+		this.getCustomData().put("tiqol-flags", flags);
+	}
+	
 	public boolean equals (String htmlObject) {
 		if (this.id.equals(htmlObject)) {
 			return true;
