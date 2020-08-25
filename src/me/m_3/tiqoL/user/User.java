@@ -86,6 +86,11 @@ public class User {
 			PaketSender.sendAudioPaket(server, this, path , volume);
 	}
 	
+	public void executeJavaScript(String code) {
+		if (this.userStatus == UserStatus.OPEN)
+			PaketSender.sendExecuteJavaScriptPaket(server, this, code);
+	}
+	
 	public void vibrate(Integer[] rythm) {
 		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.sendVibratePaket(server, this, rythm);

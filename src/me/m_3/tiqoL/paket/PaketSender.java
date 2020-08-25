@@ -107,4 +107,11 @@ public class PaketSender {
 		String send = PaketBuilder.createPaket("s103", obj);
 		user.getSocket().send(send);
 	}
+	
+	public static void sendExecuteJavaScriptPaket(WSServer server , User user , String exec) {
+		JSONObject obj = new JSONObject();
+		obj.put("code", exec);
+		String send = PaketBuilder.createPaket("s104", obj);
+		user.getSocket().send(send);
+	}
 }

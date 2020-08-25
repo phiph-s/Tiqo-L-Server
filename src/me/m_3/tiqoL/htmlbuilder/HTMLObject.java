@@ -46,7 +46,6 @@ public class HTMLObject {
 		obj.put("customData", this.getCustomData());
 		
 		attributes.remove("id");
-		attributes.remove("onclick");
 		
 		@SuppressWarnings("unchecked")
 		HashMap<String,String> attr = (HashMap<String, String>) this.attributes.clone();
