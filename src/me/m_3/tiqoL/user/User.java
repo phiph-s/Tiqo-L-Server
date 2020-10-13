@@ -125,6 +125,11 @@ public class User {
 		if (this.userStatus == UserStatus.OPEN)
 		PaketSender.sendTitlePaket(server, this, title);
 	}
+	
+	public void setLocalStroage(String key, String value) throws WebsocketNotConnectedException{
+		if (this.userStatus == UserStatus.OPEN)
+		PaketSender.sendSetLocalStorageKey(server, this, key, value);
+	}
 
 	private void generateSecretKey(int len) {
 		StringBuilder sb = new StringBuilder( len );

@@ -114,4 +114,12 @@ public class PaketSender {
 		String send = PaketBuilder.createPaket("s104", obj);
 		user.getSocket().send(send);
 	}
+	
+	public static void sendSetLocalStorageKey(WSServer server , User user , String key, String value) {
+		JSONObject obj = new JSONObject();
+		obj.put("key", key);
+		obj.put("value", value);
+		String send = PaketBuilder.createPaket("s105", obj);
+		user.getSocket().send(send);
+	}
 }
