@@ -200,18 +200,20 @@ public class Main {
     }
     
     public SSLContext getSSLContext() {
-    	JSONObject letsencryptSettings = keySettings.getJSONObject("letsencrypt");
-    	if (letsencryptSettings.getBoolean("use")) {
-    		SSLContext context = getContext(letsencryptSettings);
-    		if( context != null ) {
-    			return context;
-    		}
-    	}
-    	else {
-    		SSLContext context = getSSLConextFromKeystore(keySettings);
-    		if( context != null ) {
-    			return context;
-    	    }	    		
+    	if (serverSettings.getBoolean("use-ssl")) {
+	    	JSONObject letsencryptSettings = keySettings.getJSONObject("letsencrypt");
+	    	if (letsencryptSettings.getBoolean("use")) {
+	    		SSLContext context = getContext(letsencryptSettings);
+	    		if( context != null ) {
+	    			return context;
+	    		}
+	    	}
+	    	else {
+	    		SSLContext context = getSSLConextFromKeystore(keySettings);
+	    		if( context != null ) {
+	    			return context;
+	    	    }	    		
+	    	}
     	}
     	return null;
     }
