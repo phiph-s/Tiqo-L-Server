@@ -52,6 +52,22 @@ public class Main {
 	
 	WSServer webSocketServer;
 	
+	public JSONObject getKeySettings() {
+		return keySettings;
+	}
+
+	public JSONObject getSettings() {
+		return settings;
+	}
+
+	public JSONObject getServerSettings() {
+		return serverSettings;
+	}
+
+	JSONObject keySettings;
+	JSONObject settings;
+	JSONObject serverSettings;
+	
 	static org.slf4j.Logger Logger = LoggerFactory.getLogger(WSServer.class);
 	
     public static void main(String[] args)
@@ -96,14 +112,14 @@ public class Main {
     	
     	
     	    	
-    	JSONObject settings = new JSONObject(WSServer.readFile(System.getProperty("user.dir") + File.separator + "settings.json"));
-    	JSONObject serverSettings = settings.getJSONObject("server");
+    	settings = new JSONObject(WSServer.readFile(System.getProperty("user.dir") + File.separator + "settings.json"));
+    	serverSettings = settings.getJSONObject("server");
     	
     	Logger.info("Starting server on " + serverSettings.getString("host") + ":" + serverSettings.getInt("port"));
-    	this.webSocketServer = new WSServer(serverSettings.getString("host") , serverSettings.getInt("port"));
+    	this.webSocketServer = new WSServer(this, serverSettings.getString("host") , serverSettings.getInt("port"));
     	WSServer server = this.webSocketServer;
     	    	
-    	JSONObject keySettings = serverSettings.getJSONObject("keystore");
+    	keySettings = serverSettings.getJSONObject("keystore");
     	
     	//Use SSL
     	if (serverSettings.getBoolean("use-ssl")) {
@@ -181,6 +197,23 @@ public class Main {
 
     	this.webSocketServer.setConnectionLostTimeout(15);
     	this.webSocketServer.run();
+    }
+    
+    public SSLContext getSSLContext() {
+    	JSONObject letsencryptSettings = keySettings.getJSONObject("letsencrypt");
+    	if (letsencryptSettings.getBoolean("use")) {
+    		SSLContext context = getContext(letsencryptSettings);
+    		if( context != null ) {
+    			return context;
+    		}
+    	}
+    	else {
+    		SSLContext context = getSSLConextFromKeystore(keySettings);
+    		if( context != null ) {
+    			return context;
+    	    }	    		
+    	}
+    	return null;
     }
     
     private static SSLContext getSSLConextFromKeystore(JSONObject keySettings) {

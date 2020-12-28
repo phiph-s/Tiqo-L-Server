@@ -157,13 +157,15 @@ public class WSServer extends WebSocketServer {
 	
 	Core core;
 	
+	Main main;
+	
    /**
     * Constructor to create a server instance.
     * The server needs to be started using WSServer::start()
     * The constructor will also load the provided core
     */
 
-	public WSServer(String host, int port) {
+	public WSServer(Main main, String host, int port) {
 		super(new InetSocketAddress(host, port));
 		
 		Logger.info(",--------.,--.                     ,--.");   
@@ -181,7 +183,13 @@ public class WSServer extends WebSocketServer {
 		getEventManager().registerHandler(mainEventHandler);
 		
 		mainHTMLClickHandler = new MainHTMLClickHandler();
+		
+		this.main = main;
 				
+	}
+	
+	public Main getMain() {
+		return main;
 	}
 	
 	void loadCore() {
