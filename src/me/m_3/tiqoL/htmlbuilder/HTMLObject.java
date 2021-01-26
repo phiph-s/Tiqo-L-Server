@@ -119,6 +119,11 @@ public class HTMLObject {
 		return this;
 	}
 	
+	public String getHtmlAttribute(String key) {
+		if (this.attributes.containsKey(key)) return this.attributes.get(key);
+		return null;
+	}
+	
 	public HTMLObject unsetHtmlAttribute(String key) {
 		this.attributes.remove(key);
 		return this;
