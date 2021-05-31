@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import me.m_3.tiqoL.WSServer;
 import me.m_3.tiqoL.htmlbuilder.HTMLCanvas;
 import me.m_3.tiqoL.htmlbuilder.HTMLObject;
+import me.m_3.tiqoL.htmlbuilder.exceptions.UnknownObjectIDException;
 import me.m_3.tiqoL.user.User;
 
 public class PaketSender {
@@ -122,4 +123,20 @@ public class PaketSender {
 		String send = PaketBuilder.createPaket("s105", obj);
 		user.getSocket().send(send);
 	}
+	
+	public static void transitionRemoveObject(WSServer server , User user , String objectid, String transition) {
+		JSONObject obj = new JSONObject();
+		obj.put("objectid", objectid);
+		obj.put("transition", transition);
+		String send = PaketBuilder.createPaket("s106", obj);
+		user.getSocket().send(send);
+		
+		//Remove object from htmlbox
+		try {
+			user.getHtmlBox().removeObject(user.getHtmlBox().getObject(objectid), false);
+		} catch (UnknownObjectIDException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -11,6 +11,7 @@ import org.dizitart.no2.Cursor;
 import org.dizitart.no2.Document;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteCollection;
+import org.dizitart.no2.WriteResult;
 import org.dizitart.no2.filters.Filters;
 import org.dizitart.no2.tool.Recovery;
 import org.slf4j.LoggerFactory;
@@ -52,29 +53,24 @@ public class SessionStorage{
 
 		Runnable task = new Runnable() {
 			public void run() {
-				int amount = 0;
-				for (Document doc : security.find()) {
-					if (!doc.containsKey("used")) {
-						updateSession((String) doc.get("session"));
-						continue;
-					}
-					
-					Long diff = Calendar.getInstance().getTimeInMillis() - doc.getLastModifiedTime();
-	        		Long diffHours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
-
-	        		if (diffHours > 168) {
-	        			//Timeout session after 168 hours
-	        			security.remove(Filters.eq("session", doc.get("session")));
-	        			amount++;
-	        		}
-				}
-				System.out.println("Removed "+amount+" timed-out sessions from database to free up space...");
+				clearOldSessions();
         		scheduler.schedule(this, 60, TimeUnit.MINUTES);
       		}
 		};
 		
 		scheduler.schedule(task, 10, TimeUnit.SECONDS);
 		
+	}
+	
+	//Clear guest names
+	public void clearOldSessions() {
+		int amount = 0;
+				
+		Long removeAfter = Calendar.getInstance().getTimeInMillis() - TimeUnit.MILLISECONDS.convert(672, TimeUnit.HOURS);
+		WriteResult data = security.remove(Filters.lt("_modified", removeAfter));
+		amount = data.getAffectedCount();
+		
+		System.out.println("[SessionStorage] Removed "+amount+" timed-out sessions from database to free up space...");
 	}
 	
 	public void setCustomData(String session_id, String key, String data) {
