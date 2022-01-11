@@ -372,13 +372,12 @@ public class WSServer extends WebSocketServer {
 			this.sessionStorage.no_close_event.remove(socketAdress);
 			return;
 		}
-		if (this.getUserMap() != null && conn != null) {
+		if (this.getUserMap() != null) {
 			if (this.getUserMap().containsKey(socketAdress)) {
 				this.getEventManager().callConnectionEndEvent(this.userMap.get(socketAdress) , 0 , null , true);
 			}
 		}
-		if (conn != null)
-			Logger.error("an error occured on connection " + socketAdress + ":" + ex);
+		Logger.error("an error occured on connection " + socketAdress + ":" + ex);
 	}
 	
    /**

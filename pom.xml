@@ -19,7 +19,7 @@
   <repositories>
     <repository>
       <id>org.json</id>
-      <url>http://mvnrepository.com/artifact/org.json/json</url>
+      <url>https://mvnrepository.com/artifact/org.json/json</url>
     </repository>
   </repositories>
   <dependencies>

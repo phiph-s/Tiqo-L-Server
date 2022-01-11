@@ -80,13 +80,9 @@ public class ServableFile {
             }
          } catch (IOException e) {
              Logger.warn("The requested file can't be served ("+e.getMessage()+")");
+             return null;
          }
-		try {
-			return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, mimeType, new FileInputStream(file), file.length());
-		} catch (FileNotFoundException e) {
-			return null;
-		}
-
+		return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, mimeType, fis, file.length());
     }
 
 }

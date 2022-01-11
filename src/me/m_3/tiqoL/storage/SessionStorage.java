@@ -118,6 +118,8 @@ public class SessionStorage{
 				}
 			}
 			
+			if (restore == null) return null;
+			
 			server.getUserMap().remove(restore.getAddress().toString());
 			
 			no_close_event.add(restore.getAddress().toString());
