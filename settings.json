@@ -3,6 +3,7 @@
     "host": "localhost",
     "port": 9885,
     "contentServerPort": 9985,
+    "contentServerPublicURL": "http://localhost:9985",
     "use-ssl": false,
     "keystore": {
       "letsencrypt" : {

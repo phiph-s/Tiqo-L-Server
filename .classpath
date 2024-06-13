@@ -17,7 +17,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/seelo/Downloads/spigot-1.18.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/seelo/Downloads/MapManager_v1.8.8-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

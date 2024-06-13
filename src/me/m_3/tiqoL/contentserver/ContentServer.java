@@ -15,15 +15,17 @@ public class ContentServer extends NanoHTTPD {
 	String host;
 	int port;
 	boolean secured = false;
+	String publicurl;
 	
 	HashMap<String , ServableFile> publicFiles = new HashMap<String , ServableFile>();
 	
 	static org.slf4j.Logger Logger = LoggerFactory.getLogger(WSServer.class);
 	
-	public ContentServer(String hostname, int port) {
+	public ContentServer(String hostname, int port, String publicURL) {
 		super(hostname, port);
 		this.host = hostname;
 		this.port = port;
+		this.publicurl = publicURL;
 	}
 	
 	public void setSSL(boolean ssl) {
@@ -60,8 +62,8 @@ public class ContentServer extends NanoHTTPD {
 	
 	public String getURL(String id) {
 		if (this.secured)
-			return "https://"+this.host+":"+this.port+"/?file="+id;
-		return "http://"+this.host+":"+this.port+"/?file="+id;
+			return publicurl + "/?file="+id;
+		return publicurl + "/?file="+id;
 	}
 	
 	public String getPrivateURL(String id) {

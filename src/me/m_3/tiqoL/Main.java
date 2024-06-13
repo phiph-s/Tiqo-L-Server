@@ -144,7 +144,7 @@ public class Main {
     	int contentPort = serverSettings.getInt("contentServerPort");
     	Logger.info("Starting content server on port "+contentPort+" ...");
     	
-    	ContentServer contentServer = new ContentServer(serverSettings.getString("host") , contentPort);
+    	ContentServer contentServer = new ContentServer(serverSettings.getString("host") , contentPort, serverSettings.getString("contentServerPublicURL"));
     	
     	//Use SSL
     	if (serverSettings.getBoolean("use-ssl")) {
